@@ -47,11 +47,13 @@ class CLIPVisionTower(nn.Module):
         if type(images) is list:
             image_features = []
             for image in images:
-                image_forward_out = self.vision_tower(image.to(device=self.device, dtype=self.dtype).unsqueeze(0), output_hidden_states=True)
+                image_forward_out = self.vision_tower(image.to(device=self.device, dtype=self.dtype).unsqueeze(0),
+                                                      output_hidden_states=True)
                 image_feature = self.feature_select(image_forward_out).to(image.dtype)
                 image_features.append(image_feature)
         else:
-            image_forward_outs = self.vision_tower(images.to(device=self.device, dtype=self.dtype), output_hidden_states=True)
+            image_forward_outs = self.vision_tower(images.to(device=self.device, dtype=self.dtype),
+                                                   output_hidden_states=True)
             image_features = self.feature_select(image_forward_outs).to(images.dtype)
 
         return image_features
@@ -88,21 +90,20 @@ class CLIPVisionTower(nn.Module):
         return (self.config.image_size // self.config.patch_size) ** 2
 
 
-
 class CLIPVisionTowerS2(CLIPVisionTower):
     def __init__(self, vision_tower, args, delay_load=False):
-        super().__init__(vision_tower, args, delay_load)
 
         self.s2_scales = getattr(args, 's2_scales', '336,672,1008')
         self.s2_scales = list(map(int, self.s2_scales.split(',')))
         self.s2_scales.sort()
         self.s2_split_size = self.s2_scales[0]
         self.s2_image_size = self.s2_scales[-1]
-
+        super().__init__(vision_tower, args, delay_load)
         try:
             from s2wrapper import forward as multiscale_forward
         except ImportError:
-            raise ImportError('Package s2wrapper not found! Please install by running: \npip install git+https://github.com/bfshi/scaling_on_scales.git')
+            raise ImportError(
+                'Package s2wrapper not found! Please install by running: \npip install git+https://github.com/bfshi/scaling_on_scales.git')
         self.multiscale_forward = multiscale_forward
 
         # change resize/crop size in preprocessing to the largest image size in s2_scale
@@ -126,7 +127,8 @@ class CLIPVisionTowerS2(CLIPVisionTower):
 
     @torch.no_grad()
     def forward_feature(self, images):
-        image_forward_outs = self.vision_tower(images.to(device=self.device, dtype=self.dtype), output_hidden_states=True)
+        image_forward_outs = self.vision_tower(images.to(device=self.device, dtype=self.dtype),
+                                               output_hidden_states=True)
         image_features = self.feature_select(image_forward_outs).to(images.dtype)
         return image_features
 
@@ -135,13 +137,32 @@ class CLIPVisionTowerS2(CLIPVisionTower):
         if type(images) is list:
             image_features = []
             for image in images:
-                image_feature = self.multiscale_forward(self.forward_feature, image.unsqueeze(0), img_sizes=self.s2_scales, max_split_size=self.s2_split_size)
+                image_feature = self.multiscale_forward(self.forward_feature, image.unsqueeze(0),
+                                                        img_sizes=self.s2_scales, max_split_size=self.s2_split_size)
                 image_features.append(image_feature)
         else:
-            image_features = self.multiscale_forward(self.forward_feature, images, img_sizes=self.s2_scales, max_split_size=self.s2_split_size)
+            image_features = self.multiscale_forward(self.forward_feature, images, img_sizes=self.s2_scales,
+                                                     max_split_size=self.s2_split_size)
 
         return image_features
 
     @property
     def hidden_size(self):
         return self.config.hidden_size * len(self.s2_scales)
+
+
+if __name__ == '__main__':
+    # check the tower:
+    from collections import namedtuple
+    import numpy as np
+
+    Args = namedtuple("Args", ["mm_vision_select_layer"])
+    args = Args(-2)
+    model_name = "openai/clip-vit-large-patch14-336"
+    model = CLIPVisionTower(vision_tower=model_name, args=args)
+    image = torch.tensor(np.zeros((1, 3, 336, 336)))
+    print(model(image).shape)
+
+    model = CLIPVisionTowerS2(vision_tower=model_name, args=args)
+    image = torch.tensor(np.zeros((1, 3, 336, 336)))
+    print(model(image).shape)
