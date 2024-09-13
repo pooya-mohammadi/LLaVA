@@ -20,7 +20,7 @@
 
 ## Release
 
-- [2024/05/10] 🔥 **LLaVA-NeXT** (Stronger) models are released, stronger LMM with support of LLama-3 (8B) and Qwen-1.5 (72B/110B). [[Blog](https://llava-vl.github.io/blog/2024-05-10-llava-next-stronger-llms/)] [[Checkpoints](https://huggingface.co/collections/lmms-lab/llava-next-6623288e2d61edba3ddbf5ff)] [[Demo](https://llava-next.lmms-lab.com/)] [[Code](https://github.com/LLaVA-VL/LLaVA-NeXT/)] 
+- [2024/05/10] 🔥 **LLaVA-NeXT** (Stronger) models are released, stronger LMM with support of LLama-3 (8B) and Qwen-1.5 (72B/110B). [[Blog](https://llava-vl.github.io/blog/2024-05-10-llava-next-stronger-llms/)] [[Checkpoints](https://huggingface.co/collections/lmms-lab/llava-next-6623288e2d61edba3ddbf5ff)] [[Demo](https://llava-next.lmms-lab.com/)] [[Code](https://github.com/LLaVA-VL/LLaVA-NeXT/)]
 - [2024/05/10] 🔥 **LLaVA-NeXT** (Video) is released. The image-only-trained LLaVA-NeXT model is surprisingly strong on video tasks with zero-shot modality transfer. DPO training with AI feedback on videos can yield significant improvement. [[Blog](https://llava-vl.github.io/blog/2024-04-30-llava-next-video/)] [[Checkpoints](https://huggingface.co/collections/lmms-lab/llava-next-video-661e86f5e8dabc3ff793c944)] [[Code](https://github.com/LLaVA-VL/LLaVA-NeXT/)]
 - [03/10] Releasing **LMMs-Eval**, a highly efficient evaluation pipeline we used when developing LLaVA-NeXT. It supports the evaluation of LMMs on dozens of public datasets and allows new dataset onboarding, making the dev of new LMMs much faster. [[Blog](https://lmms-lab.github.io/lmms-eval-blog/lmms-eval-0.1/)] [[Codebase](https://github.com/EvolvingLMMs-Lab/lmms-eval)]
 - [1/30] 🔥 **LLaVA-NeXT** (LLaVA-1.6) is out! With additional scaling to LLaVA-1.5, LLaVA-NeXT-34B outperforms Gemini Pro on some benchmarks. It can now process 4x more pixels and perform more tasks/applications than before. Check out the [blog post](https://llava-vl.github.io/blog/2024-01-30-llava-next/), and explore the [demo](https://llava.hliu.cc/)! Models are available in [Model Zoo](https://github.com/haotian-liu/LLaVA/blob/main/docs/MODEL_ZOO.md). Training/eval data and scripts coming soon.
@@ -183,7 +183,7 @@ flowchart BT
     subgraph Demo Connections
         direction BT
         c<-->gws
-        
+
         mw7b<-->c
         mw13b<-->c
         lsglw13b<-->c
@@ -434,14 +434,14 @@ If you find LLaVA useful for your research and applications, please cite using t
 }
 
 @misc{liu2023improvedllava,
-      title={Improved Baselines with Visual Instruction Tuning}, 
+      title={Improved Baselines with Visual Instruction Tuning},
       author={Liu, Haotian and Li, Chunyuan and Li, Yuheng and Lee, Yong Jae},
       publisher={arXiv:2310.03744},
       year={2023},
 }
 
 @misc{liu2023llava,
-      title={Visual Instruction Tuning}, 
+      title={Visual Instruction Tuning},
       author={Liu, Haotian and Li, Chunyuan and Wu, Qingyang and Lee, Yong Jae},
       publisher={NeurIPS},
       year={2023},
@@ -461,3 +461,13 @@ If you find LLaVA useful for your research and applications, please cite using t
 For future project ideas, please check out:
 - [SEEM: Segment Everything Everywhere All at Once](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once)
 - [Grounded-Segment-Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything) to detect, segment, and generate anything by marrying [Grounding DINO](https://github.com/IDEA-Research/GroundingDINO) and [Segment-Anything](https://github.com/facebookresearch/segment-anything).
+
+
+## My trial
+```python
+--lora_enable True --lora_r 128 --lora_alpha 256 --mm_projector_lr 2e-5  --deepspeed /home/aicvi/projects/cardio-segmentation/llava_section/LLaVA/scripts/zero3.json --model_name_or_path liuhaotian/llava-v1.5-13b --version v1 --data_path ./playground/cardiac.json --image_folder ./playground/cardiac --vision_tower openai/clip-vit-large-patch14-336 --mm_projector_type mlp2x_gelu --mm_vision_select_layer -2 --mm_use_im_start_end False --mm_use_im_patch_token False --image_aspect_ratio pad --group_by_modality_length True --bf16 True --output_dir ./checkpoints/llava-v1.5-13b-cardiac-lora --num_train_epochs 10 --per_device_train_batch_size 16 --per_device_eval_batch_size 4 --gradient_accumulation_steps 1 --evaluation_strategy "no" --save_strategy "steps"     --save_steps 50000 --save_total_limit 1 --learning_rate 2e-4 --weight_decay 0. --warmup_ratio 0.03 --lr_scheduler_type "cosine"  --logging_steps 1  --tf32 True --model_max_length 2048 --gradient_checkpointing True --dataloader_num_workers 8 --lazy_preprocess True
+```
+### First attempt:
+```python
+--lora_enable True --lora_r 128 --lora_alpha 256 --mm_projector_lr 2e-5  --model_name_or_path liuhaotian/llava-v1.5-13b --version v1 --data_path /home/aicvi/projects/cardio-segmentation/llava_section/LLaVA/playground/cardiac.json --image_folder ./playground/cardiac --vision_tower openai/clip-vit-large-patch14-336 --mm_projector_type mlp2x_gelu --mm_vision_select_layer -2 --mm_use_im_start_end False --mm_use_im_patch_token False --image_aspect_ratio pad --group_by_modality_length True --bf16 True --output_dir ./checkpoints/llava-v1.5-13b-cardiac-lora --num_train_epochs 10 --per_device_train_batch_size 16 --per_device_eval_batch_size 4 --gradient_accumulation_steps 1 --evaluation_strategy "no" --save_strategy "steps"     --save_steps 50000 --save_total_limit 1 --learning_rate 2e-4 --weight_decay 0. --warmup_ratio 0.03 --lr_scheduler_type "cosine"  --logging_steps 1  --tf32 True --model_max_length 2048 --gradient_checkpointing True --dataloader_num_workers 8 --lazy_preprocess True
+```
