@@ -87,7 +87,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 images,
                 image_sizes
             )
-
+        inputs_embeds = inputs_embeds.to(torch.bfloat16)
         return super().forward(
             input_ids=input_ids,
             attention_mask=attention_mask,
