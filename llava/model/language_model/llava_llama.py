@@ -87,6 +87,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 images,
                 image_sizes
             )
+        # TODO: Double check the following modification you made. Without this it would fail due to type mismatch :(
         inputs_embeds = inputs_embeds.to(torch.bfloat16)
         return super().forward(
             input_ids=input_ids,
