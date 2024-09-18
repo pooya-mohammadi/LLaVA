@@ -208,7 +208,7 @@ class Conversation:
         }
 
 
-conv_vicuna_v0 = Conversation(
+conversation_vicuna_v0 = Conversation(
     system="A chat between a curious human and an artificial intelligence assistant. "
            "The assistant gives helpful, detailed, and polite answers to the human's questions.",
     roles=("Human", "Assistant"),
@@ -239,7 +239,7 @@ conv_vicuna_v0 = Conversation(
     sep="###",
 )
 
-conv_vicuna_v1 = Conversation(
+conversation_vicuna_v1 = Conversation(
     system="A chat between a curious user and an artificial intelligence assistant. "
     "The assistant gives helpful, detailed, and polite answers to the user's questions.",
     roles=("USER", "ASSISTANT"),
@@ -251,7 +251,7 @@ conv_vicuna_v1 = Conversation(
     sep2="</s>",
 )
 
-conv_llama_2 = Conversation(
+conversation_llama_2 = Conversation(
     system="""You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
 
 If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.""",
@@ -264,7 +264,7 @@ If a question does not make any sense, or is not factually coherent, explain why
     sep2="</s>",
 )
 
-conv_llava_llama_2 = Conversation(
+conversation_llava_llama_2 = Conversation(
     system="You are a helpful language and vision assistant. "
            "You are able to understand the visual content that the user provides, "
            "and assist the user with a variety of tasks using natural language.",
@@ -277,7 +277,7 @@ conv_llava_llama_2 = Conversation(
     sep2="</s>",
 )
 
-conv_mpt = Conversation(
+conversation_mpt = Conversation(
     system="""<|im_start|>system
 A conversation between a user and an LLM-based AI assistant. The assistant gives helpful and honest answers.""",
     roles=("<|im_start|>user\n", "<|im_start|>assistant\n"),
@@ -288,7 +288,7 @@ A conversation between a user and an LLM-based AI assistant. The assistant gives
     sep="<|im_end|>",
 )
 
-conv_llava_plain = Conversation(
+conversation_llava_plain = Conversation(
     system="",
     roles=("", ""),
     messages=(
@@ -298,7 +298,7 @@ conv_llava_plain = Conversation(
     sep="\n",
 )
 
-conv_llava_v0 = Conversation(
+conversation_llava_v0 = Conversation(
     system="A chat between a curious human and an artificial intelligence assistant. "
            "The assistant gives helpful, detailed, and polite answers to the human's questions.",
     roles=("Human", "Assistant"),
@@ -309,7 +309,7 @@ conv_llava_v0 = Conversation(
     sep="###",
 )
 
-conv_llava_v0_mmtag = Conversation(
+conversation_llava_v0_mmtag = Conversation(
     system="A chat between a curious user and an artificial intelligence assistant. "
            "The assistant is able to understand the visual content that the user provides, and assist the user with a variety of tasks using natural language."
            "The visual content will be provided with the following format: <Image>visual content</Image>.",
@@ -322,7 +322,7 @@ conv_llava_v0_mmtag = Conversation(
     version="v0_mmtag",
 )
 
-conv_llava_v1 = Conversation(
+conversation_llava_v1 = Conversation(
     system="A chat between a curious human and an artificial intelligence assistant. "
            "The assistant gives helpful, detailed, and polite answers to the human's questions.",
     roles=("USER", "ASSISTANT"),
@@ -334,7 +334,7 @@ conv_llava_v1 = Conversation(
     sep2="</s>",
 )
 
-conv_llava_v1_mmtag = Conversation(
+conversation_llava_v1_mmtag = Conversation(
     system="A chat between a curious user and an artificial intelligence assistant. "
            "The assistant is able to understand the visual content that the user provides, and assist the user with a variety of tasks using natural language."
            "The visual content will be provided with the following format: <Image>visual content</Image>.",
@@ -347,7 +347,7 @@ conv_llava_v1_mmtag = Conversation(
     version="v1_mmtag",
 )
 
-conv_mistral_instruct = Conversation(
+conversation_mistral_instruct = Conversation(
     system="",
     roles=("USER", "ASSISTANT"),
     version="llama_v2",
@@ -358,7 +358,7 @@ conv_mistral_instruct = Conversation(
     sep2="</s>",
 )
 
-conv_chatml_direct = Conversation(
+conversation_chatml_direct = Conversation(
     system="""<|im_start|>system
 Answer the questions.""",
     roles=("<|im_start|>user\n", "<|im_start|>assistant\n"),
@@ -369,26 +369,26 @@ Answer the questions.""",
     sep="<|im_end|>",
 )
 
-default_conversation = conv_vicuna_v1
-conv_templates = {
-    "default": conv_vicuna_v0,
-    "v0": conv_vicuna_v0,
-    "v1": conv_vicuna_v1,
-    "vicuna_v1": conv_vicuna_v1,
-    "llama_2": conv_llama_2,
-    "mistral_instruct": conv_mistral_instruct,
-    "chatml_direct": conv_chatml_direct,
-    "mistral_direct": conv_chatml_direct,
+default_conversation = conversation_vicuna_v1
+conversation_templates = {
+    "default": conversation_vicuna_v0,
+    "v0": conversation_vicuna_v0,
+    "v1": conversation_vicuna_v1,
+    "vicuna_v1": conversation_vicuna_v1,
+    "llama_2": conversation_llama_2,
+    "mistral_instruct": conversation_mistral_instruct,
+    "chatml_direct": conversation_chatml_direct,
+    "mistral_direct": conversation_chatml_direct,
 
-    "plain": conv_llava_plain,
-    "v0_plain": conv_llava_plain,
-    "llava_v0": conv_llava_v0,
-    "v0_mmtag": conv_llava_v0_mmtag,
-    "llava_v1": conv_llava_v1,
-    "v1_mmtag": conv_llava_v1_mmtag,
-    "llava_llama_2": conv_llava_llama_2,
+    "plain": conversation_llava_plain,
+    "v0_plain": conversation_llava_plain,
+    "llava_v0": conversation_llava_v0,
+    "v0_mmtag": conversation_llava_v0_mmtag,
+    "llava_v1": conversation_llava_v1,
+    "v1_mmtag": conversation_llava_v1_mmtag,
+    "llava_llama_2": conversation_llava_llama_2,
 
-    "mpt": conv_mpt,
+    "mpt": conversation_mpt,
 }
 
 

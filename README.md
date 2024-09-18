@@ -508,3 +508,13 @@ CUDA_VISIBLE_DEVICES=0 python model_vqa.py \
     --model-path /home/aicvi/projects/LLaVA/llava/train/checkpoints/llava-v1.5-7b-lora/final --model-base lmsys/vicuna-7b-v1.5 --question-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_questions.jsonl  --image-folder /home/aicvi/projects/LLaVA/playground/data/coco2014_val --answers-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_answers.jsonl
 ```
 
+10. Now training on my own data in the slowest format :)
+```commandline
+CUDA_VISIBLE_DEVICES=1 python llava/train/train.py --lora_enable True --lora_r 16 --lora_alpha 32 --mm_projector_lr 2e-5 --model_name_or_path lmsys/vicuna-7b-v1.5 --version v1 --data_path /home/aicvi/projects/LLaVA/playground/llava_v1_5_mix665k_cardiac.json --image_folder /home/aicvi/projects/LLaVA/playground/data --vision_tower openai/clip-vit-large-patch14-336 --pretrain_mm_mlp_adapter /home/aicvi/projects/LLaVA/checkpoints/llava-v1-5-7b-pretrain/mm_projector.bin --mm_projector_type mlp2x_gelu --mm_vision_select_layer -2 --mm_use_im_start_end False  --mm_use_im_patch_token False  --image_aspect_ratio pad --group_by_modality_length True --bf16 True --output_dir /home/aicvi/projects/LLaVA/checkpoints/llava-v1.5-7b-lora-cardiac-v0 --num_train_epochs 5 --per_device_train_batch_size 1 --per_device_eval_batch_size 1 --gradient_accumulation_steps 4 --evaluation_strategy "no" --save_strategy "steps" --save_steps 5000 --save_total_limit 1 --learning_rate 2e-4 --weight_decay 0. --warmup_ratio 0.03 --lr_scheduler_type "cosine"  --logging_steps 1 --tf32 True --model_max_length 2048  --gradient_checkpointing True --dataloader_num_workers 24 --lazy_preprocess True --report_to tensorboard
+```
+
+11. Now let's do the evaluation:
+```commandline
+CUDA_VISIBLE_DEVICES=0 python llava/eval/model_vqa.py \
+    --model-base lmsys/vicuna-7b-v1.5 --model-path /home/aicvi/projects/LLaVA/checkpoints/llava-v1.5-7b-lora-cardiac-v0 --question-file /home/aicvi/projects/LLaVA/playground/data/cardiac_qa_eval/qa1_questions.jsonl  --image-folder /home/aicvi/projects/LLaVA/playground/data/cardiac --answers-file /home/aicvi/projects/LLaVA/playground/data/cardiac_qa_eval/qa1_answers.jsonl
+```
