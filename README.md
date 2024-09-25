@@ -503,9 +503,7 @@ CUDA_VISIBLE_DEVICES=0 python model_vqa.py \
 9. The previous step didn't work because of NoneType vision tower. No I will add parameters for adding vision tower(openai clip)!
 ```commandline
 CUDA_VISIBLE_DEVICES=0 python model_vqa.py \
-    --model-path /home/aicvi/projects/LLaVA/checkpoints/llava-v1.5-7b-lora --question-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_questions.jsonl  --image-folder /home/aicvi/projects/LLaVA/playground/data/coco2014_val --answers-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_answers.jsonl --vision_tower = openai/clip-vit-large-patch14-336 --mm_vision_select_layer = -2 --mm_vision_select_feature = False --pretrain_mm_mlp_adapter = False
-    --model-path /home/aicvi/projects/LLaVA/llava/train/checkpoints/llava-v1.5-7b-lora/final --question-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_questions.jsonl  --image-folder /home/aicvi/projects/LLaVA/playground/data/coco2014_val --answers-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_answers.jsonl --vision_tower = openai/clip-vit-large-patch14-336 --mm_vision_select_layer = -2 --mm_vision_select_feature = False --pretrain_mm_mlp_adapter = False
-    --model-path /home/aicvi/projects/LLaVA/llava/train/checkpoints/llava-v1.5-7b-lora/final --model-base lmsys/vicuna-7b-v1.5 --question-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_questions.jsonl  --image-folder /home/aicvi/projects/LLaVA/playground/data/coco2014_val --answers-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_answers.jsonl
+    --model-path /home/aicvi/projects/LLaVA/checkpoints/llava-v1.5-7b-lora_v0 --model-base lmsys/vicuna-7b-v1.5 --question-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_questions.jsonl  --image-folder /home/aicvi/projects/LLaVA/playground/data/coco2014_val --answers-file /home/aicvi/projects/LLaVA/playground/data/coco2014_val_qa_eval/qa90_answers.jsonl
 ```
 
 10. Now training on my own data in the slowest format :)
