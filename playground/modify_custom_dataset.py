@@ -1,10 +1,11 @@
+from argparse import ArgumentParser
 from os.path import join
 import os
 from typing import Any
 
 from deep_utils import JsonUtils, DirUtils
 
-choose_n_data = 100
+# choose_n_data = 100
 
 mapping = dict(user="human", assistant="gpt")
 
@@ -13,12 +14,19 @@ def map_role(conversation):
     conversation['from'] = mapping.get(conversation['from'], conversation['from'])
     return conversation
 
+parser = ArgumentParser()
+
+parser.add_argument("--input", default="cardiac.json")
+parser.add_argument("--output", default="llava_v1_5_mix665k_cardiac.json")
+args = parser.parse_args()
+
 
 if __name__ == '__main__':
-    input_file_path = "cardiac.json"
-    dct = JsonUtils.load(input_file_path)
-    output_file = "llava_v1_5_mix665k_cardiac.json"
+    input_file_path = args.input
+    output_file = args.output
 
+
+    dct = JsonUtils.load(input_file_path)
 
     def update_conversation(it):
         it['conversations'] = it['conversations'][4:]
