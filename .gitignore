@@ -36,3 +36,5 @@ serve_images/
 playground/data/textvqa
 playground/data/val2014
 playground/data/cardiac
+playground/data/coco2014_val
+playground/data/custom_data
