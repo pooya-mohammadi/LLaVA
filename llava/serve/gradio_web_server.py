@@ -7,8 +7,7 @@ import time
 import gradio as gr
 import requests
 
-from llava.conversation import (default_conversation, conv_templates,
-                                   SeparatorStyle)
+from llava.conversation import (default_conversation, conversation_templates, SeparatorStyle)
 from llava.constants import LOGDIR
 from llava.utils import (build_logger, server_error_msg,
     violates_moderation, moderation_msg)
@@ -197,7 +196,7 @@ def http_bot(state, model_selector, temperature, top_p, max_new_tokens, request:
             template_name = "llama_2"
         else:
             template_name = "vicuna_v1"
-        new_state = conv_templates[template_name].copy()
+        new_state = conversation_templates[template_name].copy()
         new_state.append_message(new_state.roles[0], state.messages[-2][1])
         new_state.append_message(new_state.roles[1], None)
         state = new_state
